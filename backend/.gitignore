@@ -1,0 +1,69 @@
+# Виртуальное окружение
+env/
+venv/
+
+# Скомпилированные файлы Python
+*.py[cod]
+__pycache__/
+*$py.class
+
+# База данных SQLite
+*.sqlite3
+*.db
+
+# Переменные окружения
+.env
+*.env
+
+# Медиа-файлы
+media/
+
+# Статические файлы
+staticfiles/
+static/
+
+# Лог-файлы
+*.log
+logs/
+
+# Файлы редакторов и IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+
+# Node.js
+node_modules/
+
+# Пакеты и сборка
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+sdist/
+var/
+wheels/
+
+# Сгенерированные файлы C
+*.so
+
+# Кэш и метаданные тестирования
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+
+# Docker
+*.dockerfile
+docker-compose*.yml
