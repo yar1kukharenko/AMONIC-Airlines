@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { setCookie } from "nookies";
 
 const Page = () => {
@@ -8,6 +8,8 @@ const Page = () => {
     password: "",
   });
 
+  const [attempts, setAttempts] = useState(0);
+  const [timer, setTimer] = useState(0); // Добавляем состояние таймера
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
@@ -21,6 +23,11 @@ const Page = () => {
     e.preventDefault();
     setError("");
     setSuccess("");
+
+    if (timer > 0) {
+      return; // Если таймер еще не завершился, блокируем дальнейшие попытки
+    }
+
     try {
       const res = await fetch("http://localhost:8000/api/user/login/", {
         method: "POST",
@@ -46,11 +53,17 @@ const Page = () => {
           maxAge: 30 * 24 * 60 * 60,
           path: "/",
         });
-        setSuccess("Успешно зарегистрированы");
+        setSuccess("Успешно вошли в систему");
+        setAttempts(0); // Сбрасываем количество попыток при успешном входе
       } else {
         const errorMessages = Object.values(data).flat().join(" ");
+        setAttempts(attempts + 1);
 
-        setError(errorMessages || "Ошибка при регистрации");
+        if (attempts + 1 >= 3) {
+          setTimer(10); // Запускаем таймер на 10 секунд при 3 неудачных попытках
+        }
+
+        setError(errorMessages || "Ошибка при входе");
       }
     } catch (err) {
       console.error(err);
@@ -58,11 +71,23 @@ const Page = () => {
     }
   };
 
+  // Эффект для таймера, который будет отсчитывать время
+  useEffect(() => {
+    if (timer > 0) {
+      const countdown = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+
+      // Очищаем интервал, когда таймер завершится
+      return () => clearInterval(countdown);
+    }
+  }, [timer]);
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor={"email"}>Username</label>
+          <label htmlFor={"email"}>Email</label>
           <input
             onChange={handleChange}
             id={"email"}
@@ -72,7 +97,7 @@ const Page = () => {
           />
         </div>
         <div>
-          <label htmlFor={"password"}>Password</label>
+          <label htmlFor={"password"}>Пароль</label>
           <input
             onChange={handleChange}
             id={"password"}
@@ -85,7 +110,16 @@ const Page = () => {
           {error && <div style={{ color: "red" }}>{error}</div>}
           {success && <div style={{ color: "green" }}> {success}</div>}
         </div>
-        <button type="submit">Login</button>
+        <div>
+          {timer > 0 && (
+            <div style={{ color: "red" }}>
+              Попробуйте снова через {timer} секунд
+            </div>
+          )}
+        </div>
+        <button disabled={timer > 0} type="submit">
+          Войти
+        </button>
       </form>
     </div>
   );
