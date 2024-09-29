@@ -72,7 +72,7 @@ class EditRoleSerializer(serializers.ModelSerializer):
 class UserActivityLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserActivityLog
-        fields = ['login_time', 'logout_time', 'duration', 'logout_reason']
+        fields = [ 'login_time', 'logout_time', 'duration', 'logout_reason']
 
 
 class UserSerializer(serializers.ModelSerializer):

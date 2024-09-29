@@ -1,0 +1,6 @@
+departure_airport_id,arrival_airport_id,distance,flight_time
+1,2,453,1:04
+2,3,455,1:09
+1,4,1636,2:32
+4,5,325,0:54
+5,1,810,1:30

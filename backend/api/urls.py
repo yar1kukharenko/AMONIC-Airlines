@@ -7,6 +7,7 @@ from drf_yasg import openapi
 from rest_framework import permissions
 
 urlpatterns = [
-    path('user/', include('user.urls')),  # Подключаем маршруты из приложения 'user'
+    path('user/', include('user.urls')),
+    path('flight/', include('flight.urls')),
 ]
 
