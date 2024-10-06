@@ -1,0 +1,16 @@
+.container {
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.row {
+	cursor: pointer;
+	transition: background-color 0.3s ease-in-out;
+
+}
+
+.rowSelected {
+	background-color: #f5f5f5;
+}

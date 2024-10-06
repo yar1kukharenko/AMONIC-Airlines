@@ -68,6 +68,25 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:3001',
 ]
 
+
+CORS_ALLOW_HEADERS = [
+    'authorization',
+    'content-type',
+    'x-requested-with',
+]  # Разрешаем заголовки, используемые в запросах
+
+
+CORS_ALLOW_METHODS = [
+    'GET',
+    'POST',
+    'PUT',
+    'PATCH',
+    'DELETE',
+    'OPTIONS',
+]  # Разрешаем методы, используемые в запросах
+
+CORS_ALLOW_CREDENTIALS = True
+
 ROOT_URLCONF = 'backend.urls'
 
 TEMPLATES = [

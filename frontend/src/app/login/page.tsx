@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { setCookie } from "nookies";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
   const [formData, setFormData] = useState({
@@ -14,6 +15,8 @@ const Page = () => {
   const [success, setSuccess] = useState("");
 
   const { password, email } = formData;
+
+  const router = useRouter(); // Инициализируем useRouter
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -44,17 +47,16 @@ const Page = () => {
       console.log(data);
 
       if (res.ok) {
-        setCookie(null, "accessToken", data.accessToken, {
-          maxAge: 30 * 24 * 60 * 60,
+        setCookie(null, "access", data.access, {
           path: "/",
         });
 
-        setCookie(null, "refreshToken", data.refreshToken, {
-          maxAge: 30 * 24 * 60 * 60,
+        setCookie(null, "refresh", data.refresh, {
           path: "/",
         });
         setSuccess("Успешно вошли в систему");
         setAttempts(0); // Сбрасываем количество попыток при успешном входе
+        router.push("/dashboard");
       } else {
         const errorMessages = Object.values(data).flat().join(" ");
         setAttempts(attempts + 1);

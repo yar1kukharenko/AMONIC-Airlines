@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import RegisterView, CustomTokenObtainPairView
+from .views import RegisterView, CustomTokenObtainPairView, OfficeNameListView
 from rest_framework_simplejwt.views import TokenRefreshView
 from .views import UserActivityLogListView
 from .views import LogoutView
@@ -22,5 +22,8 @@ urlpatterns = [
     path('users/', UserListView.as_view(), name='user_list'),
     path('users/<int:pk>/edit-role/', EditUserRoleView.as_view(), name='edit_user_role'),
     path('users/<int:user_id>/toggle-login/', EnableDisableLoginView.as_view(), name='toggle_login'),
+
+    path('offices/', OfficeNameListView.as_view(), name='office_name_list'),
+
     
 ]

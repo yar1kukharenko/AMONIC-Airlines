@@ -2,9 +2,10 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
-from .models import UserActivityLog
+from .models import UserActivityLog, Role, Office
 
 User = get_user_model()
+
 
 class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
@@ -28,9 +29,12 @@ class RegisterSerializer(serializers.ModelSerializer):
             email=validated_data['email']
         )
         user.set_password(validated_data['password'])
+        default_role = Role.objects.get(title='User')
+        user.role = default_role
         user.save()
         return user
-    
+
+
 # Сериализатор для создания пользователей
 class AddUserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
@@ -38,7 +42,7 @@ class AddUserSerializer(serializers.ModelSerializer):
         validators=[UniqueValidator(queryset=User.objects.all())]
     )
     password = serializers.CharField(write_only=True, required=True)
-    
+
     class Meta:
         model = User
         fields = ('email', 'firstname', 'lastname', 'office', 'birthdate', 'password')
@@ -55,6 +59,7 @@ class AddUserSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
+
 # Сериализатор для редактирования роли пользователя
 class EditRoleSerializer(serializers.ModelSerializer):
     class Meta:
@@ -68,19 +73,36 @@ class EditRoleSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Администратор не может назначать других администраторов.")
         return value
 
+
 #отображения активности
 class UserActivityLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserActivityLog
-        fields = [ 'login_time', 'logout_time', 'duration', 'logout_reason']
+        fields = ['login_time', 'logout_time', 'duration', 'logout_reason']
 
 
 class UserSerializer(serializers.ModelSerializer):
+    role = serializers.SerializerMethodField()
+    office = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ['firstname', 'lastname', 'role', 'email', 'office']
+        fields = ["id", 'firstname', 'lastname', 'role', 'email', 'office', "birthdate"]
+
+    def get_role(self, obj):
+        return obj.role.title if obj.role else "No Role"
+
+    def get_office(self, obj):
+        return obj.office.title if obj.office else "No Office"
+
 
 class EditRoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['role']
+
+
+class OfficeNameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Office
+        fields = ["id", 'title']

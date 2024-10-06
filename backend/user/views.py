@@ -6,12 +6,12 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.utils import timezone
 from datetime import timedelta
-from .models import UserActivityLog, User, Role
+from .models import UserActivityLog, User, Role, Office
 from .serializers import (
-    RegisterSerializer, 
-    UserActivityLogSerializer, 
-    AddUserSerializer, 
-    EditRoleSerializer
+    RegisterSerializer,
+    UserActivityLogSerializer,
+    AddUserSerializer,
+    EditRoleSerializer, OfficeNameSerializer
 )
 from rest_framework import generics, permissions
 from .models import User
@@ -42,10 +42,21 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 class CustomTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
-        user = self.get_user(request.data['email'])  # Находим пользователя по email
+        user = self.get_user(request.data.get('email'))
+
         if user:
+            # Добавляем логику для записи активности пользователя
             UserActivityLog.objects.create(user=user, login_time=timezone.now())
-        return response
+
+            # Получаем токен из ответа
+            token_data = response.data
+
+            # Добавляем роль пользователя в ответ
+            token_data['role'] = user.role.title if user.role else "No Role"
+
+            return Response(token_data, status=status.HTTP_200_OK)
+
+        return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
     def get_user(self, email):
         try:
@@ -209,3 +220,9 @@ class EnableDisableLoginView(APIView):
             return Response({"message": f"User login {status_msg}."}, status=status.HTTP_200_OK)
         except User.DoesNotExist:
             return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
+
+class OfficeNameListView(generics.ListAPIView):
+    queryset = Office.objects.all()
+    serializer_class = OfficeNameSerializer
+    permission_classes = [AllowAny]  # Можно изменить на нужные права доступа
