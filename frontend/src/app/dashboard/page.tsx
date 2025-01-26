@@ -15,6 +15,7 @@ import styles from "./dashboard.module.scss";
 import api from "@/axiosInstance";
 import classNames from "classnames";
 import AddUserPopup from "@/components/AddUserPopup/AddUserPopup";
+import ChangeRolePopup from "@/components/ChangeRolePopup/ChangeRolePopup";
 
 const Page = () => {
   const [users, setUsers] = useState([]);
@@ -23,6 +24,7 @@ const Page = () => {
   const [offices, setOffices] = useState([]);
   const [office, setOffice] = useState("all");
   const [openPopup, setOpenPopup] = useState(false);
+  const [openRolePopup, setOpenRolePopup] = useState(false);
 
   const handleOfficeChange = async (e) => {
     setOffice(e.target.value);
@@ -70,6 +72,12 @@ const Page = () => {
   return (
     <>
       <AddUserPopup onClose={() => setOpenPopup(false)} open={openPopup} />
+      <ChangeRolePopup
+        role={users.find((user) => user.id === selectedCell)?.role}
+        open={openRolePopup}
+        id={selectedCell}
+        onClose={() => setOpenRolePopup(false)}
+      />
       <div className={styles.container}>
         <Grid2 container spacing={2}>
           <Grid2>
@@ -136,7 +144,12 @@ const Page = () => {
             </TableContainer>
           </Grid2>
           <Grid2 size={4}>
-            <Button disabled={!selectedCell}>Сменить роль</Button>
+            <Button
+              disabled={!selectedCell}
+              onClick={() => setOpenRolePopup(true)}
+            >
+              Сменить роль
+            </Button>
           </Grid2>
           <Grid2 size={4}>
             <Button disabled={!selectedCell}> Включить/Выключить Вход</Button>

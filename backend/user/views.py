@@ -197,7 +197,8 @@ class EditUserRoleView(generics.UpdateAPIView):
         request_body=EditRoleSerializer,
         responses={200: "Роль пользователя успешно изменена", 400: "Ошибки валидации"}
     )
-    def put(self, request, *args, **kwargs):
+    def put(self, request, *args,
+            **kwargs):
         return super().put(request, *args, **kwargs)
 
 class EnableDisableLoginView(APIView):

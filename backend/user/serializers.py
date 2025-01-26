@@ -48,14 +48,17 @@ class AddUserSerializer(serializers.ModelSerializer):
         fields = ('email', 'firstname', 'lastname', 'office', 'birthdate', 'password')
 
     def create(self, validated_data):
+        role = Role.objects.get(title='User')
         user = User.objects.create(
             email=validated_data['email'],
             firstname=validated_data['firstname'],
             lastname=validated_data['lastname'],
             office=validated_data['office'],
             birthdate=validated_data['birthdate'],
+            role=role
         )
         user.set_password(validated_data['password'])
+
         user.save()
         return user
 
