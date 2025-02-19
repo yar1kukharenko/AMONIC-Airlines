@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'drf_yasg',
     'user',
     'flight',
-    'booking'
+    'booking',
+    'surveys'
 ]
 
 

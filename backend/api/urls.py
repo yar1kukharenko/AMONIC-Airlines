@@ -10,5 +10,6 @@ urlpatterns = [
     path('user/', include('user.urls')),
     path('flight/', include('flight.urls')),
     path('booking/', include('booking.urls')),
+    path('surveys/', include('surveys.urls')),
 ]
 
