@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'user',
     'flight',
     'booking',
-    'surveys'
+    'surveys',
+    'additional_services',
 ]
 
 
@@ -99,11 +100,11 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
-        'PORT': os.getenv('DB_PORT'),
+        'NAME': 'mydjangodb',
+        'USER': 'myuser',
+        'PASSWORD': 'secure_password',
+        'HOST': '158.160.156.196',
+        'PORT': '5432',
     }
 }
 
