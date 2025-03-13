@@ -7,7 +7,7 @@ from .models import UserActivityLog
 # Кастомный админ для модели User
 class UserAdmin(BaseUserAdmin):
     # Какие поля отображать в списке пользователей в админке
-    list_display = ('email', 'firstname', 'lastname', 'is_staff', 'active', 'role', 'office')
+    list_display = ('id', 'email', 'firstname', 'lastname', 'is_staff', 'active', 'role', 'office')
 
     # Поля для фильтрации
     list_filter = ('is_staff', 'active', 'role', 'office')
@@ -38,7 +38,7 @@ class UserAdmin(BaseUserAdmin):
 
 @admin.register(UserActivityLog)
 class UserActivityLogAdmin(admin.ModelAdmin):
-    list_display = ('user', 'login_time', 'logout_time', 'duration', 'logout_reason')
+    list_display = ('id','user', 'login_time', 'logout_time', 'duration', 'logout_reason')
     search_fields = ('user__email',)
     list_filter = ('login_time', 'logout_time')
 
